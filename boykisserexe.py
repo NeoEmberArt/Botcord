@@ -4,6 +4,14 @@ import re
 import datetime
 from discord.ext import commands
 from discord import ui, app_commands
+import psutil
+import platform
+import discord
+from discord import app_commands
+import os
+from pathlib import Path
+import yt_dlp
+import asyncio
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -66,6 +74,72 @@ bot = MuzzleBot(command_prefix="!", intents=intents)
 
 
 
+
+def download_twitter_media(url: str) -> str:
+    downloads_path = str(Path.home() / "Downloads")
+    cookies_path = "cookies.txt"  # path to your cookies file
+
+    ydl_opts = {
+        'outtmpl': os.path.join(downloads_path, '%(title)s.%(ext)s'),
+        'quiet': True,
+        'noplaylist': True,
+        'no_warnings': True,
+        'cookiefile': cookies_path,  # <-- Add this line to load cookies
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info_dict = ydl.extract_info(url, download=True)
+        filename = ydl.prepare_filename(info_dict)
+
+    return filename
+
+
+@bot.tree.command(name="snag", description="Download videos from Twitter/Instagram/TikTok/YouTube (max 25mb each)")
+@app_commands.describe(urls="One or more URLs separated by spaces")
+async def download(interaction: discord.Interaction, urls: str):
+    url_list = urls.split()  # split by spaces
+    max_files = 5  # limit max URLs to prevent spam/heavy load
+    if len(url_list) > max_files:
+        await interaction.response.send_message(f"Please provide up to {max_files} URLs at once.", ephemeral=True)
+        return
+
+    await interaction.response.defer()  # defer for long tasks
+
+    import random
+    messages = [
+        "here ya go :3",
+        "meow file done",
+        "purrfect delivery!",
+        "your download is ready!",
+        "got it for you, enjoy!",
+        "meow~ file incoming!",
+        "here's your tasty download!",
+        "done and delivered!",
+        "snagged that for you!",
+        "media at your paws!",
+    ]
+
+    for url in url_list:
+        if not any(domain in url for domain in ["x.com", "twitter.com", "instagram.com", "youtube.com", "youtu.be", "tiktok.com"]):
+            await interaction.followup.send(f"❌ Unsupported link: {url}", ephemeral=True)
+            continue
+
+        try:
+            downloaded_file = await asyncio.to_thread(download_twitter_media, url)
+
+            if not os.path.exists(downloaded_file):
+                await interaction.followup.send(f"❌ Download failed or file not found for: {url}")
+                continue
+
+            chosen_msg = random.choice(messages)
+            await interaction.followup.send(chosen_msg, file=discord.File(downloaded_file))
+
+            os.remove(downloaded_file)
+
+        except Exception as e:
+            await interaction.followup.send(f"❌ Error downloading {url}: {e}")
+
+
 @bot.tree.command(name="muzzle", description="Give someone the Muzzled role")
 @discord.app_commands.describe(member="User to muzzle")
 async def muzzle(interaction: discord.Interaction, member: discord.Member):
@@ -90,7 +164,60 @@ async def muzzle(interaction: discord.Interaction, member: discord.Member):
 
     muzzle_counts_since_awake[user_id] = muzzle_counts_since_awake.get(user_id, 0) + 1
 
-@bot.tree.command(name="stats", description="View muzzle stats and uptime")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class StatsView(ui.View):
+    def __init__(self, interaction: discord.Interaction, muzzle_embed, bot_embed):
+        super().__init__(timeout=60)
+        self.interaction = interaction
+        self.muzzle_embed = muzzle_embed
+        self.bot_embed = bot_embed
+        self.current_page = 0  # 0 = muzzle, 1 = bot
+        self.message = None
+
+    async def update(self):
+        embed = self.muzzle_embed if self.current_page == 0 else self.bot_embed
+        await self.message.edit(embed=embed, view=self)
+
+    @ui.button(label="Muzzled Stats", style=discord.ButtonStyle.secondary)
+    async def back(self, interaction: discord.Interaction, button: ui.Button):
+        if interaction.user != self.interaction.user:
+            await interaction.response.send_message("You can't use this!", ephemeral=True)
+            return
+        self.current_page = 0
+        await interaction.response.defer()
+        await self.update()
+
+    @ui.button(label="Nerd Stats", style=discord.ButtonStyle.secondary)
+    async def next(self, interaction: discord.Interaction, button: ui.Button):
+        if interaction.user != self.interaction.user:
+            await interaction.response.send_message("You can't use this!", ephemeral=True)
+            return
+        self.current_page = 1
+        await interaction.response.defer()
+        await self.update()
+
+
+@bot.tree.command(name="stats", description="View muzzle stats and bot status")
 async def stats(interaction: discord.Interaction):
     now = datetime.utcnow()
     uptime = now - bot_start_time
@@ -109,13 +236,46 @@ async def stats(interaction: discord.Interaction):
         user = interaction.guild.get_member(int(top_id))
         return f"{user.display_name if user else 'Unknown'} ({count})"
 
-    embed = discord.Embed(title="📊 Bot Stats", color=discord.Color.blue())
-    embed.add_field(name="Uptime", value=format_seconds(uptime), inline=False)
-    embed.add_field(name="Most Muzzled Today", value=top_user(stats["muzzle_counts_today"]), inline=False)
-    embed.add_field(name="Most Muzzled Since Awake", value=top_user(muzzle_counts_since_awake), inline=False)
-    embed.add_field(name="Most Muzzled All Time", value=top_user(stats["muzzle_counts_all_time"]), inline=False)
+    # Page 1: Muzzle Stats
+    muzzle_embed = discord.Embed(title="Muzzle Stats", color=discord.Color.orange())
+    muzzle_embed.add_field(name="Most Muzzled Today", value=top_user(stats["muzzle_counts_today"]), inline=False)
+    muzzle_embed.add_field(name="Most Muzzled Since Awake", value=top_user(muzzle_counts_since_awake), inline=False)
+    muzzle_embed.add_field(name="Most Muzzled All Time", value=top_user(stats["muzzle_counts_all_time"]), inline=False)
 
-    await interaction.response.send_message(embed=embed)
+    import os
+
+    # === System stats ===
+    cpu_freq = psutil.cpu_freq()
+    cpu_max_ghz = cpu_freq.max / 1000 if cpu_freq else 0  # MHz → GHz
+    mem = psutil.virtual_memory()
+    mem_available_gb = mem.available / (1024 ** 3)
+    mem_total_gb = mem.total / (1024 ** 3)
+    # === Bot process stats ===
+    proc = psutil.Process(os.getpid())
+    bot_cpu_percent = proc.cpu_percent(interval=0.5)
+    bot_mem_mb = proc.memory_info().rss / (1024 ** 2)
+
+    # === Formatted display ===
+    cpu_display = f"{bot_cpu_percent:.1f}% of {cpu_max_ghz:.1f} GHz"
+    mem_display = f"{bot_mem_mb:.1f} MB / {mem_available_gb:.1f} GB free (max {mem_total_gb:.1f} GB)"
+    latency = round(interaction.client.latency * 1000)
+
+    # === Embed construction ===
+    bot_embed = discord.Embed(title="🖥️ Bot Status", color=discord.Color.blue())
+    bot_embed.add_field(name="Uptime", value=format_seconds(uptime), inline=False)
+    bot_embed.add_field(name="Latency", value=f"{latency}ms", inline=True)
+    bot_embed.add_field(name="Bot CPU Usage", value=cpu_display, inline=True)
+    bot_embed.add_field(name="Bot Memory Usage", value=mem_display, inline=True)
+    bot_embed.add_field(name="Guilds", value=str(len(interaction.client.guilds)), inline=True)
+    bot_embed.add_field(name="Python", value=platform.python_version(), inline=True)
+    bot_embed.add_field(name="discord.py", value=discord.__version__, inline=True)
+    bot_embed.add_field(name="Online?", value="DUHH!  :3", inline=False)
+
+    # === Send view ===
+    view = StatsView(interaction, muzzle_embed, bot_embed)
+    await interaction.response.defer()
+    view.message = await interaction.followup.send(embed=muzzle_embed, view=view)
+
 
 
 @bot.tree.command(name="unmuzzle", description="Remove the Muzzled role from someone")
