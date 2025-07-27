@@ -72,7 +72,7 @@ Run the main Python file that contains your bot code, e.g.:
 ```bash
 cd c:/users/YOU/DOWNLOADSFOLDER/OR WHERE THE FILE IS
 
-python bot.py
+python boykisserexe.py
 ```
 
 Make sure your environment variable `ALTOBOT_TOKEN` is set before running.
