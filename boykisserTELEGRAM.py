@@ -1,3 +1,7 @@
+BOT_TOKEN = "ADD YOUR TELEGRAM BOT TOKEN HERE"
+
+
+
 import os
 import re
 import asyncio
@@ -7,8 +11,7 @@ from yt_dlp import YoutubeDL
 from telegram import Update, InputFile
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
 import random
-# === CONFIG ===
-BOT_TOKEN = "BOT TOKEN HEREEEEEEEEEEEEEEEEEEEEE"
+
 DOWNLOAD_DIR = Path.home() / "Downloads" / "TelegramBotDownloads"
 DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
