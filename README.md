@@ -26,11 +26,9 @@ You need to provide your bot token to the bot securely via environment variables
 
 Open Command Prompt and run:
 
-cmd
-
-Copy code
-
-`setx ALTOBOT_TOKEN "YOUR_BOT_TOKEN_HERE"`
+```bash
+setx ALTOBOT_TOKEN "YOUR_BOT_TOKEN_HERE"
+```
 
 Then close and reopen your terminal or IDE to make sure the environment variable is loaded.
 
