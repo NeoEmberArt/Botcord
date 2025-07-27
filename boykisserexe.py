@@ -1,19 +1,18 @@
-import os
-import re
-import random
-import asyncio
-import datetime
-import platform
-from pathlib import Path
-
-import psutil
-import yt_dlp
-
+version = "Boykisser.exe - (V4, Patch 2)"
 import discord
-from discord import app_commands, ui
+import random
+import re
+import datetime
 from discord.ext import commands
-
-
+from discord import ui, app_commands
+import psutil
+import platform
+import discord
+from discord import app_commands
+import os
+from pathlib import Path
+import yt_dlp
+import asyncio
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -46,16 +45,84 @@ def save_stats(stats):
 
 
 MUFFLED_MESSAGES_NORMAL = [
-    "*Muffled sounds*", "*paws at muzzle helplessly*", "*sits down and huffs softly*",
-    "*makes soft squeaky noises*", "*pouts silently*", "*softly squeaking through the muzzle*",
+    "*Muffled sounds*", "*paws at muzzle helplessly*", "*sits down and huffs softly*", "meow meow meow, im adorable!", "lookit me im adorable!",
+    "*makes soft squeaky noises*", "*pouts silently*", "*softly squeaking through the muzzle*", "*cute sounds coming from a cute critter*",
     "*submissive floppy bean energy*", "*Whimpering under a muzzle*", "*Cute sounds*",
     "*cutely vibrating in place*", "*I blink slowly and accept my fate*", "*happy muffled giggling*",
     "*Small adorable noises*", "*Trying to say I'm cute but I can't*", "*Just plain cute noises coming out*",
     "MMMMRFRRFRFF", "*muffled mumbles*", "*just sits here blushing*", "*wags tail because I'm into it*",
     "*grumpy cutie sounds*", "*just being a good boy*", "*Is muzzed like a kinky bean~*",
     "Im adorable... Wait, im supposed to be muzzled.. i mean MERRRFFFFFMMM!!!!",
-    "I'm adorable!!", "im the cutest  ;3", "*nods in agreement*"
+    "I'm adorable!!", "im the cutest  ;3", "*nods in agreement*","*nods in agreement*","*nods in agreement*",
+
+    # New entries
+    "*tugs at the straps with a little whimper*", "*gives you the most pitiful look*", "*squirms slightly in place*",
+    "*happy tail wags despite the muffling*", "*nuzzles your hand with a soft whine*", "*shakes head with a squeak*",
+    "*looks up with wide puppy eyes because im a puppy~~~~*", "*lightly taps muzzle with paw*", "*muffled yipping noises*", 
+    "*just flops over dramatically*", "*lets out a squeaky sigh*", "*cute lil huffing noises*",
+    "*muffled 'i love you'*", "*wiggles in frustration and fluff*", "*snuggles up silently*",
+    "*makes soft 'mrrph' noises*", "*softly boops you with their nose*", "*wiggles tail like a cutie*", 
+    "*trembles with too much cute*", "*faint muffled whining in the distance*", "*muzzlesmooch noises*", 
+    "*tail thump thump thump*", "*paws kneading at the floor softly*", "*rolls over cutely*", 
+    "*makes a small muffled chirp*", "*tries to bark, ends up squeaking*", "*tilts head curiously while muzzed*",
+    "*glares playfully through the muzzle*", "*muffled giggle-snorts*", "*presses up close for attention*"
+    "*blinks slowly with puppy eyes*",
+    "*sniffs the air softly*",
+    "*quietly hums a happy tune*",
+
+
+
+
+
+    # NEWER ENTRIES CONTINUE
+    "*softly snickers in muffled delight*",
+    "*tilts head and wiggles ears*",
+    "*muffled little chirp of excitement*",
+    "*curls up in a tiny ball*",
+    "*gives a shy, muffled meow*",
+    "*paws gently pat your hand*",
+    "*lets out a soft, muffled sigh*",
+    "*blushes under the muzzle*",
+    "*makes a small, muffled humming noise*",
+    "*snickers behind the muzzle*",
+    "*snuggles closer, muffled content*",
+    "*nuzzles softly despite the restraint*",
+    "*muffled purrs of happiness*",
+    "*pokes nose out, muffled and curious*",
+    "*giggles muffled and sweet*",
+    "*wiggles softly in place*",
+    "*squeaks softly in agreement*",
+    "*happy muffled chirrup*",
+    "*shakes head with a muffled giggle*",
+    "*gives a tiny muffled yawn*",
+    "*makes an adorably muffled sneeze*",
+    "*floofs tail under the muzzle*",
+    "*snickers quietly*",
+    "*muffled soft kisses*",
+    "*quiet, muffled snorting noises*",
+    "*paws kneading softly*",
+    "*muffled gentle growls of contentment*",
+    "*curled up but restless*",
+    "*muffled happy squeaks*",
+    "*head tilts with muffled curiosity*",
+    "*tail wags just a little*",
+    "*makes a muffled ‘yay!’*",
+    "*shyly looks away, muffled*",
+    "*muffled soft squeal of joy*",
+    "*nuzzles the muzzle softly*",
+    "*tries to speak but it’s all muffled*",
+    "*blinks slowly with muffled content*",
+    "*muffled quiet snorts*",
+    "*happy muffled boops*",
+    "*muffled joyful squeaks*",
+    "*squeezes eyes shut and hums*",
+    "*wiggles paws cutely*",
+    "*makes muffled little happy noises*",
+    "*muffled happy sigh*",
+    "*curls tail around softly*",
+    "*quietly humming through the muzzle*",
 ]
+
 
 MUFFLED_MESSAGES_LOUD = [
     "*Muffled screams*", "*starts vibrating aggressively*", "*furiously muffled yells*",
@@ -64,8 +131,80 @@ MUFFLED_MESSAGES_LOUD = [
     "*struggles violently in adorable rage*", "*slams tiny fists in frustration*", "*bounces violently in place*",
     "*throws things but it's cute*", "*STOMP STOMP STOMP*", "*YELPS IN GAY*", "*REEEEEEE*",
     "*squirming around!~*", "*Angry I can't bite  >:C*", "*Gay Screaming*", "*Gay panic*",
-    "*vigorously flails tail, an angry bean*", "*GRRRRRRR!!!*", "*GRR GRRRR!!!!!!!*", "*GROWLS*"
+    "*vigorously flails tail, an angry bean*", "*GRRRRRRR!!!*", "*GRR GRRRR!!!!!!!*", "*GROWLS*",
+    "*STOMP BOUNCE STOMP*",
+    "*STOMP STOMP STOMP BOUNCE STOMP*",
+    "*STOMP STOMP BOUNCE*",
+    "*STOMP BOUNCE BOUNCE STOMP*",
+    "*BOUNCE BOUNCE BOUNCE BOUNCE*",
+    "*STOMP STOMP STOMP STOMP*",
+    # New entries
+    "*muffled rawr of fury*", "*tiny bean rage intensifies*", "*flopping dramatically while screeching*",
+    "*throws self into a spin*", "*spits muffled curses*",
+    "*angy noises through the snout*", "*stomps in place like an angry bean*", 
+    "*angry tail thwaps everything*", "*vibrating with chaotic fury*",
+    "*snorts angrily through the muzzle*", "*YEETS SELF INTO A WALL*", "*rageflop activated*",
+    "*STOMP STOMP BOUNCE STOMP*", "*flips over in maximum rage*", "*muffled screech of betrayal*",
+    "*shouting gaaaaaaay with my whole chest*", "*RRRRRFFFFFFF*", "*muffled explosion of gay energy*",
+    "*throws tantrum*",
+
+    # NEWER ENTRIED CONTINUE
+    "*muffled raging growls*", 
+    "*throws a wild tantrum*", 
+    "*furiously stomps about*", 
+    "*roars with muffled fury*", 
+    "*flails paws wildly*", 
+    "*lets out an ear-piercing squeal*", 
+    "*angrily shakes the muzzle*", 
+    "*full-on frustrated wiggles*", 
+    "*muffled, frantic yowling*", 
+    "*bounces up and down in rage*", 
+    "*lashes tail furiously*", 
+    "*screeches muffled and loud*", 
+    "*kicks the ground angrily*", 
+    "*stomping with fury*", 
+    "*squeaks loudly in protest*", 
+    "*muffled furious snarls*", 
+    "*frenzied tail thrashing*", 
+    "*makes a wild, muffled racket*", 
+    "*flips over and throws a fit*", 
+    "*muffled, high-pitched screaming*", 
+    "*twitches violently in anger*", 
+    "*muffles a furious growl*", 
+    "*paws wildly flailing*", 
+    "*stomps and squeaks*", 
+    "*throws an adorable hissy fit*", 
+    "*muffled screeches of frustration*", 
+    "*writhes in a fiery tantrum*", 
+    "*huffs and puffs loudly*", 
+    "*muffled, chaotic yips*", 
+    "*stomps feet like a thunderstorm*", 
+    "*bounces violently, frustrated*", 
+    "*growls loudly behind the muzzle*", 
+    "*throws a dramatic rage flop*", 
+    "*muffled, relentless barking*", 
+    "*flails paws and tail*", 
+    "*lets out a muffled howl*", 
+    "*screams with all the cute fury*", 
+    "*thrashes about like a wild bean*", 
+    "*muffled furious whining*", 
+    "*furiously tries to escape*", 
+    "*throws self on the floor repeatedly*", 
+    "*muffled angry yowls*", 
+    "*shrieks in playful rage*", 
+    "*bounces with grumpy energy*", 
+    "*makes a wild muffled racket*", 
+    "*stomps like a tiny thunder god*", 
+    "*twitches tail with furious energy*", 
+    "*yowls under the muzzle*", 
+    "*throws a tantrum worthy of legends*", 
+    "*muffled roar of ultimate fury*", 
+    "*paws wildly at the ground*", 
+    "*furiously wiggles ears*", 
+    "*screams muffled yet dramatic*"
+
 ]
+
 
 class MuzzleBot(commands.Bot):
     async def setup_hook(self):
@@ -96,22 +235,92 @@ def download_twitter_media(url: str) -> str:
     return filename
 
 
-@bot.tree.command(name="snag", description="Download videos from Twitter/Instagram/TikTok/YouTube (max 25mb each)")
+@bot.tree.command(name="help", description="Show all commands and what they do!")
+async def help_command(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="💡 Help Menu – What I Can Do!",
+        description="Commands you can use with me, your cute & chaotic assistant~",
+        color=discord.Color.blurple()
+    )
+
+    embed.add_field(
+        name="/snag",
+        value="Download videos from URLs (up to 10 links, max 25MB each).\nSupported: Twitter/X, TikTok, direct video URLs.",
+        inline=False
+    )
+
+    embed.add_field(
+        name="/muzzle",
+        value="Give someone the **Muzzled** role to silence them.\nRequires Manage Roles permission.",
+        inline=False
+    )
+
+    embed.add_field(
+        name="/unmuzzle",
+        value="Remove the **Muzzled** role to let them speak again.",
+        inline=False
+    )
+
+    embed.add_field(
+        name="/cage",
+        value="Give the **Caged** role and mute server-wide.",
+        inline=False
+    )
+
+    embed.add_field(
+        name="/uncage",
+        value="Remove the **Caged** role to free them.",
+        inline=False
+    )
+
+    embed.add_field(
+        name="/stats",
+        value="View muzzled user stats, bot uptime, CPU & memory usage.",
+        inline=False
+    )
+
+    embed.add_field(
+        name="/addverify",
+        value="Post age verification buttons.\nAdds **Generate** (16+) or **Degenerate** (18+) roles.",
+        inline=False
+    )
+
+    embed.set_footer(text=version + " | Made with love & cuteness")
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+
+@bot.tree.command(name="sourcecode", description="Get the link to the open source repository")
+async def source(interaction: discord.Interaction):
+    await interaction.response.send_message(
+        "Wanna run me on your own machine!? It's open source! See how it works, all my dialog, or run it privately ^w^ "
+        "https://github.com/NeoEmberArt/Botcord"
+    )
+
+@bot.tree.command(name="snag", description="Download any video from link (max 25mb each/max 10 links)")
 @app_commands.describe(urls="One or more URLs separated by spaces")
 async def download(interaction: discord.Interaction, urls: str):
-    url_list = urls.split()  # split by spaces
-    max_files = 5  # limit max URLs to prevent spam/heavy load
+    import random
+    import os
+    import traceback
+
+    url_list = urls.split()
+    max_files = 10
+    max_size_mb = 10
+
     if len(url_list) > max_files:
-        await interaction.response.send_message(f"Please provide up to {max_files} URLs at once.", ephemeral=True)
+        await interaction.response.send_message(f"Too many links! (max {max_files})", ephemeral=True)
         return
 
-    await interaction.response.defer()  # defer for long tasks
+    await interaction.response.defer()
 
-    import random
-    messages = [
+
+
+
+
+    # Cute success messages
+    success_messages = [
         "here ya go :3",
-        "meow file done",
-        "purrfect delivery!",
+        "meow file done!",
+        "purrfect delivery~",
         "your download is ready!",
         "got it for you, enjoy!",
         "meow~ file incoming!",
@@ -119,27 +328,206 @@ async def download(interaction: discord.Interaction, urls: str):
         "done and delivered!",
         "snagged that for you!",
         "media at your paws!",
+        "here ya go cuteness",
+        "all set and shiny!",
+        "does this mean i get treats?",
+        "Im a good kitty arent i!?",
+        "Great day for file transfers and hippo muzzles!",
+        "fresh from the download oven!",
+        "download magic complete!",
+        "snuggled your media for you!",
+        "mission complete, enjoy!",
+        "happy kitty delivering!",
+        "your vid is ready!",
+        "Can i get cuddles from all this hard work?~",
+        "wrapped it up nice just for you~",
+        "NYA~~ You asked, i provided!",
+        "Snuggles after?",
+        "KISS BOYS, DOWNLOAD FILES",
+        "snuck it out of the internet for ya~",
+        "*holds out paw* here ya go!",
+        "ta-da! file magically appeared!",
+        "i fetched it like a good kitty!",
+        "meownloaded successfully >w<",
+        "it’s here and it’s adorable! wait, that's just you! ;3",
+        "file’s here, all warm and cozy~",
+        "fluff-approved and ready to go!",
+        "MMMMMREEOW~ here!",
+        "*gives file* :3",
+        "*hands you the file cutely!*",
+        "*Throws the file at ya*  :3",
+        "Heck yeah! here ya go!",
+        "pssst, i can download from nearly all links",
+        "Done! Headpats now???",
+        "It worked! Give headpats now!!",
+        "Here ya go, now i demand headpats!!",
+
+        # New entries
+        "yaaay! i did it!!",
+        "file go nyoom~ into your hands!",
+        "success~ nya!",
+        "zoomies complete, file fetched!",
+        "meownload complete!",
+        "*presents the file with sparkly eyes*",
+        "delivered with extra fluff~",
+        "meep! it’s done!",
+        "brought it back like a proud kitty!",
+        "*curls tail proudly* here it is~",
+        "boop! download is done!",
+        "i did a big smart, now here’s your file!",
+        "*wiggles ears happily* file's ready!",
+        "*sets file down gently and stares at you*",
+        "*happy tail swishes* delivery successful!",
+        "got it in one pounce~",
+        "meowgic complete, file obtained!",
+        "finished with extra squeaks~",
+        "*excited bean noises* it’s done!",
+        "ta-da nya! another success~",
+        "*delivers file and demands chin scritches*",
+        "zoom-zoom meow complete!",
+        "done! now come pet meee~",
+        "nyah! got it just for you, cutie~"
     ]
 
+
+    # Cute error messages
+    error_messages = {
+        "download": [
+        "uh oh! i tried and failed to snag this one... sowwy qwq",
+        "something went ouchie while downloading... blame the gremlins!",
+        "eep! i broke it T_T couldn't fetch this one.",
+        "the download gods said no :c maybe try again?",
+        "super bad error happened!",
+        "big error!?",
+        "i tripped on a cable, download failed!",
+        "error 404: cuteness not found in file",
+        "the media escaped my paws!",
+        "fuzzy error in the system, try again?",
+        "ow! my circuits hurt, download failed!",
+        "uhuh, can't catch this one right now!",
+        "a sneaky bug blocked the download!",
+        "fluffy glitches stopped me :c",
+        "error pawsing the download...",
+        "nope nope nope, can't download that one!",
+        "i dropped the file, try again?",
+        "Download failed.",
+        "please throw some treats and try again!",
+        "meow meow, download broke! >.<",
+    ],
+    "toolarge": [
+        "@BKexe_bot on telegram for larger file size (2gb)",
+        "@BKexe_bot on telegram for larger file size (2gb)",
+        "uhuh, cant upload it.. MRFFF TOO BIGG~ ",
+        "this file is biggggggggg. discord said NOPE >///<",
+        "hewwp it's too heavy for my lil paws! >w< max 25mb only!",
+        "seems i hit a file limit for this one, try something smaller? ",
+        "you expect me to give you that? i'm too small to hold something that large. ",
+        "ARE YOU CRAZY!? THAT FILE IS TOO BIGGG!",
+        "discord doesn't like that!",
+        "HUFF, too biggggg~ ",
+        "can't carry that big of a package! >.<",
+        "that's a no-go, size too large!",
+        "my paws can’t handle this size!",
+        "send smaller bits, please!",
+        "big file alert! gotta keep it tiny!",
+        "sorry, too big!",
+        "too bigggggggg",
+        "File size too big, sorry!"
+        "sorry fren, file too big!",
+        "discord says 'nah' to that file size!",
+        "cuter but smaller, please! >w<",
+        "that file is larger than my... erm.... limits :3"
+        "uhm... i tried, but discord slapped my paw away >///<",
+        "maximum size exceeded!! try trimming it down~",
+        "it's like... 10x my weight! nu-uh! too big!",
+        "file’s a unit. a chonker. can’t do it.",
+        "uploading that big a file would tear a hole in the snuggleverse! I refuse!",
+        "i squeaked at the size and ran away!",
+        
+        "discord bonked me for even *trying* to upload that!",
+         "discord bonked me for even *trying* to upload that!",
+          "discord bonked me for even *trying* to upload that!",
+        "gonna need a bigger basket for that file... maybe two!",
+    ],
+    "notfound": [
+        "huh? file vanished after download... spooky O_O",
+        "i downloaded it but... now it's gone? Odd...",
+        "something went terribly wrong! but its okay ^^ try something else",
+        "poof! file disappeared!",
+        "its gone!?? nothing is thereeee",
+        "MMMEEOWWW? I COULDENT FIND ITTT?!"
+        "can't find the file anymore!",
+        "file took a walk and didn't come back!",
+        "uh-oh, the file ran away!",
+        "looks like the file is hiding!",
+        "error: file lost!",
+        "file no-show, try again maybe?",
+        "oopsie, file's not here!",
+        "the file's playing hide and seek!",
+        "file vanished without a trace!",
+        "no file found, my paws are empty!",
+    ],
+    "novideo": [
+        "couldn't find any video there... maybe it's private or gone :c",
+        "tried looking but... no media found T~T",
+        "the page is there, but the vid isn't! rip link?",
+        "beep boop, no video??",
+        "can't get anything from that URL, sorry!",
+        "i looked but i couldn't find a video",
+        "no vid detected, maybe it’s a secret?",
+        "video must be ninja, I can't see it!",
+        "looks like an empty box, no video inside!",
+        "the link's shy, no video to show :(",
+        "i searched high and low, no video found!",
+        "video ghosted me, gone forever!",
+        "no media on this link, sad cat :c",
+        "nope, no vid here!",
+        "the video is playing hide and seek!",
+        "nothing but silence in this link...",
+        "did the video get deleted? I can't find it!",
+        "theres literally no video on that url i could find, sorry  :C"
+        "link looks empty, no video content!",
+        "can't grab what isn't there >w<",
+        "no video detected, try another link maybe?",
+    ],
+    }
+
     for url in url_list:
-        if not any(domain in url for domain in ["x.com", "twitter.com", "instagram.com", "youtube.com", "youtu.be", "tiktok.com"]):
-            await interaction.followup.send(f"❌ Unsupported link: {url}", ephemeral=True)
+        if not url.startswith("http"):
+            await interaction.followup.send(f"That doesn't look like a link: `{url}`", ephemeral=True)
             continue
 
         try:
             downloaded_file = await asyncio.to_thread(download_twitter_media, url)
 
-            if not os.path.exists(downloaded_file):
-                await interaction.followup.send(f"❌ Download failed or file not found for: {url}")
+            if downloaded_file is None:
+                msg = random.choice(error_messages["novideo"])
+                await interaction.followup.send(f"{msg}\n`{url}`", ephemeral=True)
                 continue
 
-            chosen_msg = random.choice(messages)
-            await interaction.followup.send(chosen_msg, file=discord.File(downloaded_file))
+            if not os.path.exists(downloaded_file):
+                msg = random.choice(error_messages["notfound"])
+                await interaction.followup.send(f"{msg}\n`{url}`", ephemeral=True)
+                continue
 
+            file_size_mb = os.path.getsize(downloaded_file) / (1024 * 1024)
+            if file_size_mb > max_size_mb:
+                msg = random.choice(error_messages["toolarge"])
+                await interaction.followup.send(f"{msg}\n`{url}`", ephemeral=True)
+                os.remove(downloaded_file)
+                continue
+
+            chosen_msg = random.choice(success_messages)
+            await interaction.followup.send(chosen_msg, file=discord.File(downloaded_file))
             os.remove(downloaded_file)
 
         except Exception as e:
-            await interaction.followup.send(f"❌ Error downloading {url}: {e}")
+            tb_str = str(e).lower()
+            if any(key in tb_str for key in ["video unavailable", "unable to extract", "no video formats found"]):
+                msg = random.choice(error_messages["novideo"])
+            else:
+                msg = random.choice(error_messages["download"])
+            await interaction.followup.send(f"{msg}\n`{url}`", ephemeral=True)
 
 
 @bot.tree.command(name="muzzle", description="Give someone the Muzzled role")
@@ -243,7 +631,6 @@ async def stats(interaction: discord.Interaction):
     muzzle_embed.add_field(name="Most Muzzled Today", value=top_user(stats["muzzle_counts_today"]), inline=False)
     muzzle_embed.add_field(name="Most Muzzled Since Awake", value=top_user(muzzle_counts_since_awake), inline=False)
     muzzle_embed.add_field(name="Most Muzzled All Time", value=top_user(stats["muzzle_counts_all_time"]), inline=False)
-
     import os
 
     # === System stats ===
@@ -272,7 +659,7 @@ async def stats(interaction: discord.Interaction):
     bot_embed.add_field(name="Python", value=platform.python_version(), inline=True)
     bot_embed.add_field(name="discord.py", value=discord.__version__, inline=True)
     bot_embed.add_field(name="Online?", value="DUHH!  :3", inline=False)
-
+    bot_embed.set_footer(text=version + " |  Made with love & cuteness")
     # === Send view ===
     view = StatsView(interaction, muzzle_embed, bot_embed)
     await interaction.response.defer()
