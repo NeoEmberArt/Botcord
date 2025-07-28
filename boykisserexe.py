@@ -1,4 +1,4 @@
-version = "Boykisser.exe - (V4, Patch 2)"
+version = "Boykisser.exe - (V4, Patch 3)"
 import discord
 import random
 import re
@@ -513,9 +513,11 @@ async def download(interaction: discord.Interaction, urls: str):
             file_size_mb = os.path.getsize(downloaded_file) / (1024 * 1024)
             if file_size_mb > max_size_mb:
                 msg = random.choice(error_messages["toolarge"])
-                await interaction.followup.send(f"{msg}\n`{url}`", ephemeral=True)
+                file_size_display = f"-# {file_size_mb:.2f}MB"
+                await interaction.followup.send(f"{msg}\n{file_size_display}\n`{url}`", ephemeral=True)
                 os.remove(downloaded_file)
                 continue
+
 
             chosen_msg = random.choice(success_messages)
             await interaction.followup.send(chosen_msg, file=discord.File(downloaded_file))
