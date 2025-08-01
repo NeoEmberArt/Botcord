@@ -1,3 +1,7 @@
-discord.py
-yt-dlp 
+aiohttp
 psutil
+Pillow
+rembg
+yt-dlp
+discord.py>=2.3.2
+openai
