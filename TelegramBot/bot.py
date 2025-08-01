@@ -1,3 +1,6 @@
+BOT_TOKEN = ""
+
+
 import os
 import re
 import asyncio
@@ -8,7 +11,7 @@ from telegram import Update, InputFile
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
 import random
 # === CONFIG ===
-BOT_TOKEN = "8075824885:AAGb-aqpn_JlGkDiBIzcA4eJEzzD7OfVfEs"
+
 DOWNLOAD_DIR = Path.home() / "Downloads" / "TelegramBotDownloads"
 DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
 YDL_OPTIONS = {
