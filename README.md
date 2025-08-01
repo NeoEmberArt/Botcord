@@ -18,6 +18,16 @@ Setup Instructions
 
 * * * * *
 
+### 1\. OPENAI usage?
+-   Go to the API DOCS
+
+[OPENAI API DOCS](https://platform.openai.com/docs/overview)
+
+-   Get yourself an API token and plug it into the boykisserbot.py
+
+* * * * *
+
+
 ### 2\. Add `ALTOBOT_TOKEN` to Environment Variables
 
 You need to provide your bot token to the bot securely via environment variables.
@@ -57,7 +67,7 @@ If you don't have a `requirements.txt` file, paste this into command prompt
 
 
 ```bash
-pip install discord.py yt-dlp psutil
+pip install aiohttp psutil Pillow rembg yt-dlp discord.py openai
 ```
 
 
