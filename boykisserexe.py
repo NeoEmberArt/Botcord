@@ -1,4 +1,5 @@
 version = "Boykisser.exe - (V4, Patch 3)"
+# === Imports ===
 import discord
 import random
 import re
@@ -13,6 +14,10 @@ import os
 from pathlib import Path
 import yt_dlp
 import asyncio
+import json
+import os
+from datetime import datetime, timedelta
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -23,10 +28,7 @@ intents.messages = True
 MUZZLED_ROLE_NAME = "Muzzled"
 webhooks_cache = {}
 
-import json
-import os
 
-from datetime import datetime, timedelta
 
 STATS_FILE = "muzzle_stats.json"
 bot_start_time = datetime.utcnow()
@@ -555,23 +557,6 @@ async def muzzle(interaction: discord.Interaction, member: discord.Member):
     save_stats(stats)
 
     muzzle_counts_since_awake[user_id] = muzzle_counts_since_awake.get(user_id, 0) + 1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
